@@ -1,11 +1,12 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
-"                              Vim Configs
+"                               Vim Configs
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set nocompatible                    " be iMproved, required
 filetype off                        " required
+
 set hidden
 set number
 set relativenumber
@@ -25,17 +26,13 @@ set autochdir                       " current dir is always current working file
 set clipboard=unnamedplus           " yank/put uses system clipboard by default 
 
 let mapleader = ","
-set ttimeoutlen=40
+set ttimeoutlen=20
 
 " Remap for escape key
 inoremap kj <Esc>
-
-" Switch pane with Ctrl+[hjkl]
-let g:BASH_Ctrl_j = 'off'
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+inoremap jk <Esc>
+inoremap fd <Esc>
+inoremap df <Esc>
 
 " U is useless
 nnoremap U u
@@ -56,7 +53,7 @@ colorscheme desert
 "                                 for Gvim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set guioptions-=m "remove menu bar
-" set guioptions-=T "remove toolbar"
+set guioptions-=T "remove toolbar"
 set guioptions-=r "remove right-hand scroll bar
 set guioptions-=L "remove left-hand scroll bar
 
@@ -81,13 +78,16 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'dkprice/vim-easygrep'
 Plugin 'Galooshi/vim-import-js'
 Plugin 'jlanzarotta/bufexplorer'
-Plugin 'ctrlpvim/ctrlp.vim'         "Fuzzy search 
-Plugin 'mhinz/vim-startify'         "start screen
-Plugin 'schickling/vim-bufonly'     "delete all but current buffer
+Plugin 'ctrlpvim/ctrlp.vim'         " Fuzzy search 
+Plugin 'mhinz/vim-startify'         " start screen
+Plugin 'schickling/vim-bufonly'     " delete all but current buffer
+Plugin 'vim-airline/vim-airline'    " Cool bottom bar
+Plugin 'shoulgo/vimshell.vim'      " a better shell inside vim
 
 " ==== PLUGIN THEMES ====
 Plugin 'jonathanfilip/vim-lucius'
 Plugin 'morhetz/gruvbox'
+Plugin 'flazz/vim-colorschemes' " one stop shop for vim colorschemes
 
 " ==== PLUGIN SYNTAXES ====
 Plugin 'cakebaker/scss-syntax.vim'
@@ -109,12 +109,22 @@ let NERDTreeIgnore =
 let NERDTreeShowHidden=1
 let g:NERDTreeWinPos="left"
 let g:NERDTreeDirArrows=0
-map <C-t> :NERDTreeToggle /home/void/code<CR>
+" map <C-t> :NERDTreeToggle /home/void/code<CR>
+map <C-t> :NERDTreeToggle .<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               YouCompleteMe
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ycm_show_diagnostics_ui = 0 " disable error check
+" let g:ycm_show_diagnostics_ui = 0 " disable error check
 let g:ycm_global_ycm_extra_conf = '/home/void/.vim/default_ycm_config/.ycm_extra_conf.py' "fallback configs
 let g:ycm_confirm_extra_conf = 0
+
+
+" Switch pane with Ctrl+[hjkl] (has to be after plugins because of some conflict)
+" let g:BASH_Ctrl_j = 'off'
+let g:C_Ctrl_j = 'off'
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
