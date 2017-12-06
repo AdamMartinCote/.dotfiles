@@ -15,7 +15,7 @@
 (scroll-bar-mode -1)
 
 ;; line numbers everywhere
-;; (global-linum-mode t)
+;; (global-linum-mode t) ;; normal line numbering
 (linum-relative-global-mode)
 ;; display line number on current line
 (setq linum-relative-current-symbol "")
@@ -23,10 +23,20 @@
 ;; Emacs is always a single instance
 (server-start)
 
+;; Prevent opening stuff in other window
+(set-frame-parameter nil 'unsplittable t)
+
+;; Disable splash screen
+(setq inhibit-startup-screen t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                     Evil Mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+;;(define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up) 
+
+(setq evil-want-C-u-scroll t)
 (require 'evil)
 ;; activate
 (evil-mode)
@@ -64,6 +74,17 @@
 ;; switch window with shift-arrow
 (windmove-default-keybindings) 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                      Org Mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Allow my custom keybinding in org-mode
+(with-eval-after-load 'org
+    (define-key org-mode-map (kbd "C-,") nil))
+(with-eval-after-load 'org
+    (define-key org-mode-map (kbd "M-p") nil))
+
+
 ;; Package Manager
 (require 'package)
 
@@ -82,7 +103,7 @@
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
  '(package-selected-packages
    (quote
-    (linum-relative typescript-mode smex smart-mode-line monokai-theme monokai-alt-theme molokai-theme key-chord evil-magit evil-escape evil-commentary eproject elpy darkokai-theme auto-complete ace-window ace-jump-mode))))
+    (ivy org linum-relative typescript-mode smex smart-mode-line monokai-theme monokai-alt-theme molokai-theme key-chord evil-magit evil-escape evil-commentary eproject elpy darkokai-theme auto-complete ace-window ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -91,4 +112,5 @@
  )
 
 ;; smart-mode-line : a better bottom bar with colors
+;; need to be after ... so emacs knows it is safe
 (sml/setup)
