@@ -23,6 +23,9 @@
 ;; Emacs is always a single instance
 (server-start)
 
+;; size temporary buffer to content
+(temp-buffer-resize-mode)
+
 ;; Prevent opening stuff in other window
 (set-frame-parameter nil 'unsplittable t)
 
@@ -38,6 +41,22 @@
 ;; Powerline (bottom bar inspired by vim)
 (powerline-center-theme)
 
+;; transpose line up and down with alt key
+(defun move-line-up()
+  (interactive)
+  (transpose-lines 1)
+  (forward-line -2))
+(global-set-key (kbd "M-j") 'move-line-down)
+
+(defun move-line-down()
+  (interactive)
+  (forward-line 1)
+  (transpose-lines 1)
+  (forward-line -1))
+(global-set-key (kbd "M-k") 'move-line-up)
+
+;; Auctex pdf settings
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                     Evil Mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -51,8 +70,8 @@
 ;;Exit insert mode
 (setq key-chord-two-keys-delay 0.5)
 (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+(key-chord-define evil-replace-state-map "kj" 'evil-normal-state)
 (key-chord-mode 1)
-
 ;; Auto-complete
 (global-auto-complete-mode)
 
@@ -86,6 +105,10 @@
 (ivy-mode t)
 (setq ivy-use-virtual-buffers t)
 (setq enable-recursive-minibuffers t)
+
+;; magit shortcut
+(require 'magit)
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                      Org Mode
@@ -132,11 +155,13 @@
      ("#A75B00" . 70)
      ("#F309DF" . 85)
      ("#3C3D37" . 100))))
+ '(ido-enable-flex-matching t)
+ '(ido-mode (quote both) nil (ido))
  '(ivy-mode t)
  '(magit-diff-use-overlays nil)
  '(package-selected-packages
    (quote
-    (dired+ sane-term web-mode powerline yasnippet auctex pdf-tools gruber-darker-theme ivy org linum-relative typescript-mode smex smart-mode-line monokai-theme monokai-alt-theme molokai-theme key-chord evil-magit evil-escape evil-commentary eproject elpy darkokai-theme auto-complete ace-window ace-jump-mode)))
+    (neotree helm-projectile projectile resize-window ranger dired+ sane-term web-mode powerline yasnippet auctex pdf-tools gruber-darker-theme ivy org linum-relative typescript-mode smex smart-mode-line monokai-theme monokai-alt-theme molokai-theme key-chord evil-magit evil-escape evil-commentary eproject elpy darkokai-theme auto-complete ace-window ace-jump-mode)))
  '(pos-tip-background-color "#FFFACE")
  '(pos-tip-foreground-color "#272822")
  '(vc-annotate-background nil)
