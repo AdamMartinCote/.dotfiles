@@ -1,8 +1,8 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
-"                               Vim Configs
+"                                 Vim Configs
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set nocompatible                    " be iMproved, required
 filetype off                        " required
@@ -23,10 +23,11 @@ set comments=sl:/*,mb:\ *,elx:\ */
 set mouse=a
 set hlsearch
 set autochdir                       " current dir is always current working file dir
-set clipboard=unnamedplus           " yank/put uses system clipboard by default 
+set clipboard=unnamedplus           " yank/put uses system clipboard by default
 
 let mapleader = ","
-set ttimeoutlen=20
+set timeoutlen=10
+set ttimeoutlen=0
 
 " Remap for escape key
 inoremap kj <Esc>
@@ -43,15 +44,20 @@ vnoremap / y/\V<C-R>"<CR>
 " Better highlight color for readability
 highlight Search ctermbg=lightblue ctermfg=black  term=underline
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                  Style
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" remove trailing whitespaces on save
+autocmd BufWritePre * %s/\s\+$//e
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                    Style
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 colorscheme desert
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                 for Gvim
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                    Gvim
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set guioptions-=m "remove menu bar
 set guioptions-=T "remove toolbar"
 set guioptions-=r "remove right-hand scroll bar
@@ -60,9 +66,10 @@ set guioptions-=L "remove left-hand scroll bar
 set guifont=Monospace\ 10.5
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  Vundle
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set rtp+=/home/void/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -78,11 +85,11 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'dkprice/vim-easygrep'
 Plugin 'Galooshi/vim-import-js'
 Plugin 'jlanzarotta/bufexplorer'
-Plugin 'ctrlpvim/ctrlp.vim'         " Fuzzy search 
+Plugin 'ctrlpvim/ctrlp.vim'         " Fuzzy search
 Plugin 'mhinz/vim-startify'         " start screen
 Plugin 'schickling/vim-bufonly'     " delete all but current buffer
 Plugin 'vim-airline/vim-airline'    " Cool bottom bar
-Plugin 'shoulgo/vimshell.vim'      " a better shell inside vim
+Plugin 'shoulgo/vimshell.vim'       " a better shell inside vim
 
 " ==== PLUGIN THEMES ====
 Plugin 'jonathanfilip/vim-lucius'
@@ -99,29 +106,36 @@ call vundle#end()            " required by vundle
 filetype plugin indent on    " required by vundle
 syntax enable                " highlight matching braces
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                  NERDTREE
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let NERDTreeIgnore = 
-    \['\.pyc$', '\.o$', '\.so$', '\.a$', '\.swp', '*\.swp', '\.swo', 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                   NERDTREE
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let NERDTreeIgnore =
+    \['\.pyc$', '\.o$', '\.so$', '\.a$', '\.swp', '*\.swp', '\.swo',
     \'\.swn', '\.swm', '[a-zA-Z]*egg[a-zA-Z]*', '[a-zA-Z]*cache[a-zA-Z]*']
 
 let NERDTreeShowHidden=1
 let g:NERDTreeWinPos="left"
 let g:NERDTreeDirArrows=0
-" map <C-t> :NERDTreeToggle /home/void/code<CR>
 map <C-t> :NERDTreeToggle .<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               YouCompleteMe
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                YouCompleteMe
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " let g:ycm_show_diagnostics_ui = 0 " disable error check
-let g:ycm_global_ycm_extra_conf = '/home/void/.vim/default_ycm_config/.ycm_extra_conf.py' "fallback configs
+
+" fallback configs
+let g:ycm_global_ycm_extra_conf =
+            \'/home/void/.vim/default_ycm_config/.ycm_extra_conf.py'
+
 let g:ycm_confirm_extra_conf = 0
 
 
-" Switch pane with Ctrl+[hjkl] (has to be after plugins because of some conflict)
-" let g:BASH_Ctrl_j = 'off'
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Switch pane with Ctrl+[hjkl] (has to be after plugins)
 let g:C_Ctrl_j = 'off'
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
