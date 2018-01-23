@@ -12,6 +12,7 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -22,7 +23,8 @@
  '(custom-enabled-themes (quote (monokai)))
  '(custom-safe-themes
    (quote
-    ("8eafb06bf98f69bfb86f0bfcbe773b44b465d234d4b95ed7fa882c99d365ebfd" "61003d455ba1bad9a3bf8be7342e848ca3febe899319e95a9dc3d804d9697608" default)))
+    ("8eafb06bf98f69bfb86f0bfcbe773b44b465d234d4b95ed7fa882c99d365ebfd"
+     "61003d455ba1bad9a3bf8be7342e848ca3febe899319e95a9dc3d804d9697608" default)))
  '(ensime-sem-high-faces
    (quote
     ((var :foreground "#9876aa" :underline
@@ -44,7 +46,9 @@
      (deprecated :strike-through "#a9b7c6"))))
  '(package-selected-packages
    (quote
-    (god-mode darcula-theme projectile monokai-theme evil pdf-tools auctex-latexmk auctex multi-term auto-complete markdown-mode better-defaults))))
+    (disaster god-mode darcula-theme projectile monokai-theme
+    evil pdf-tools auctex-latexmk auctex multi-term auto-complete
+    markdown-mode better-defaults))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -68,19 +72,19 @@
 
 (setq TeX-PDF-mode t)
 
- ;; Use pdf-tools to open PDF files
+;; Use pdf-tools to open PDF files
 (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
       TeX-source-correlate-start-server t)
 
- ;; Update PDF buffers after successful LaTeX runs
+;; Update PDF buffers after successful LaTeX runs
 (add-hook 'TeX-after-compilation-finished-functions
            #'TeX-revert-document-buffer)
 
- ;; Remove splash screen
+;; Ditch Splash screen
 (setq inhibit-startup-message t
       inhibit-startup-echo-area-message t)
 
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
- ;; get hints vertically in C-x b
+;; get hints vertically in C-x b
 (setq ido-separator "\n")
