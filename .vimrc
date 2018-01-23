@@ -70,6 +70,9 @@ set guifont=Monospace\ 10.5
 "                                  Vundle
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let vundle_installed = 0
+if vundle_installed
+
 set rtp+=/home/void/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -103,6 +106,8 @@ Plugin 'othree/yajs.vim'
 Plugin 'mitsuhiko/vim-jinja'
 
 call vundle#end()            " required by vundle
+
+endif
 filetype plugin indent on    " required by vundle
 syntax enable                " highlight matching braces
 
@@ -141,4 +146,6 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+
 

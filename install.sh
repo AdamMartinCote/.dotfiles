@@ -10,22 +10,27 @@ usage() {
 
 link_emacs() {
     if [[ `ls -a $install_directory|grep -w "^\.emacs$"|wc -l` -eq 0 ]]; then
-        touch $install_directory/link_to_emacs
+        ln -s .emacs $install_directory/.emacs
         if [[ $? -eq 0 ]]; then
-            echo "succes"
+            echo "link to .emacs was created in $install_directory"
         else
-            echo "error"
+            echo "error: could not create symlink in $install_directory"
         fi
     else
-        echo "this would overwrite the current .emacs in $HOME; aborting"
+        echo "this would overwrite the current .emacs in $install_directory; aborting"
     fi
 }
 
 link_vimrc() {
     if [[ `ls -a $install_directory|grep -w "^\.vimrc$"|wc -l` -eq 0 ]]; then
-        touch $install_directory/link_to_vim
+        ln -s .vimrc $install_directory/.vimrc 2>/dev/null
+        if [[ $? -eq 0 ]]; then
+            echo "link to .vimrc was created in $install_directory"
+        else
+            echo "error: could not create symlink in $install_directory"
+        fi
     else
-        echo "this would overwrite the current .vimrc in $HOME; aborting"
+        echo "this would overwrite the current .vimrc in $install_directory; aborting"
     fi
 }
 
@@ -50,7 +55,6 @@ do
             link_vimrc
             shift
             ;;
-
         *)
             usage
             exit
