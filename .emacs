@@ -19,8 +19,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
-   ["#272822" "#F92672" "#A6E22E" "#E6DB74" "#66D9EF" "#FD5FF0"
-    "#A1EFE4" "#F8F8F2"])
+   ["#272822" "#F92672" "#A6E22E" "#E6DB74" "#66D9EF" "#FD5FF0" "#A1EFE4" "#F8F8F2"])
  '(custom-enabled-themes (quote (monokai)))
  '(custom-safe-themes
    (quote
@@ -48,7 +47,7 @@
      (deprecated :strike-through "#a9b7c6"))))
  '(package-selected-packages
    (quote
-    (scala-mode latex-extra toml toml-mode rust-mode dumb-jump 2048-game better-shell magit disaster god-mode darcula-theme projectile monokai-theme evil pdf-tools auctex-latexmk auctex multi-term auto-complete markdown-mode better-defaults)))
+    (helm-fuzzy-find maxframe scala-mode latex-extra toml toml-mode rust-mode dumb-jump 2048-game better-shell magit disaster god-mode darcula-theme projectile monokai-theme evil pdf-tools auctex-latexmk auctex multi-term auto-complete markdown-mode better-defaults)))
  '(vc-follow-symlinks nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -66,8 +65,9 @@
 (global-set-key (kbd "C-,") ctl-x-map)
 (keyboard-translate ?\C-j ?\C-x)
 
-(global-set-key (kbd "M-n") 'scroll-up-command)
-(global-set-key (kbd "M-p") 'scroll-down-command)
+;; move by a greater increment
+(global-set-key (kbd "M-n") (lambda() (interactive) (next-line 8)))
+(global-set-key (kbd "M-p") (lambda() (interactive) (previous-line 8)))
 
  ;; line numbers everywhere
 (global-linum-mode t)
@@ -77,7 +77,8 @@
 
 (global-auto-complete-mode t)
 
-(when window-system (set-frame-size (selected-frame) 90 45))
+(when window-system (set-frame-size (selected-frame) 130 55))
+(when window-system (set-frame-position (selected-frame) 350 0))
 (put 'upcase-region 'disabled nil)
 
 (setq TeX-PDF-mode t)
@@ -93,7 +94,6 @@
 ;; Ditch Splash screen
 (setq inhibit-startup-message t
       inhibit-startup-echo-area-message t)
-
 
 ;; get hints vertically in C-x b
 (ido-mode t)
@@ -132,3 +132,34 @@
 (global-set-key (kbd "S-C-l") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-j") 'shrink-window)
 (global-set-key (kbd "S-C-k") 'enlarge-window)
+
+;; Make transparent
+;;(set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>))
+;;(set-frame-parameter (selected-frame) 'alpha <both>)
+(set-frame-parameter (selected-frame) 'alpha '(95 . 75))
+(add-to-list 'default-frame-alist '(alpha . (95 . 75)))
+
+;; open from eshell
+(defalias 'ff 'find-file)
+(defalias 'emacs 'find-file)
+(defalias 'ffo 'find-file-other-window)
+
+
+
+
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+
+(global-set-key (kbd "C-c r") 'query-replace)
+
+(global-set-key (kbd "C-c a s") 'eshell-other-window)
+(global-set-key (kbd "C-c a d") 'dired)
+
+(defun eshell-other-window ()
+  "Open a `eshell' in a new window."
+  (interactive)
+  (let ((buf (eshell)))
+    (switch-to-buffer (other-buffer buf))
+    (switch-to-buffer-other-window buf)))
+
