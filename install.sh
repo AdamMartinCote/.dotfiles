@@ -1,4 +1,6 @@
 #!/bin/bash
+# Automatically create symlinks in home folder (Or specified folder)
+# for specified config files
 
 install_directory=$HOME
 
