@@ -23,9 +23,7 @@
  '(custom-enabled-themes (quote (monokai)))
  '(custom-safe-themes
    (quote
-    ("53f97243218e8be82ba035ae34c024fd2d2e4de29dc6923e026d5580c77ff702"
-     "8eafb06bf98f69bfb86f0bfcbe773b44b465d234d4b95ed7fa882c99d365ebfd"
-     "61003d455ba1bad9a3bf8be7342e848ca3febe899319e95a9dc3d804d9697608" default)))
+    ("53f97243218e8be82ba035ae34c024fd2d2e4de29dc6923e026d5580c77ff702" "8eafb06bf98f69bfb86f0bfcbe773b44b465d234d4b95ed7fa882c99d365ebfd" "61003d455ba1bad9a3bf8be7342e848ca3febe899319e95a9dc3d804d9697608" default)))
  '(ensime-sem-high-faces
    (quote
     ((var :foreground "#9876aa" :underline
@@ -47,7 +45,7 @@
      (deprecated :strike-through "#a9b7c6"))))
  '(package-selected-packages
    (quote
-    (helm-fuzzy-find maxframe scala-mode latex-extra toml toml-mode rust-mode dumb-jump 2048-game better-shell magit disaster god-mode darcula-theme projectile monokai-theme evil pdf-tools auctex-latexmk auctex multi-term auto-complete markdown-mode better-defaults)))
+    (paredit irony helm-fuzzy-find maxframe scala-mode latex-extra toml toml-mode rust-mode dumb-jump 2048-game better-shell magit disaster god-mode darcula-theme projectile monokai-theme evil pdf-tools auctex-latexmk auctex multi-term auto-complete markdown-mode better-defaults)))
  '(vc-follow-symlinks nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -69,6 +67,8 @@
 (global-set-key (kbd "M-n") (lambda() (interactive) (next-line 8)))
 (global-set-key (kbd "M-p") (lambda() (interactive) (previous-line 8)))
 
+ ;; other window backward
+(global-set-key (kbd "C-x O") (lambda() (interactive) (other-window -1)))
  ;; line numbers everywhere
 (global-linum-mode t)
 
@@ -163,3 +163,5 @@
     (switch-to-buffer (other-buffer buf))
     (switch-to-buffer-other-window buf)))
 
+(show-paren-mode t)
+(electric-pair-mode t)
