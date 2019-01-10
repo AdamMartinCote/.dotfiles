@@ -1,29 +1,26 @@
-alias l='ls -l'
-alias la='ls -A'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias ops="openstack"
+# vim: set filetype=bash
 
-alias t2="tree -L 2 ."
-alias t3="tree -L 3 ."
-alias t4="tree -L 4 ."
-alias t5="tree -L 5 ."
-alias v=$EDITOR
-alias e=$EDITOR
-alias vim=$EDITOR
+# tree
+for i in {1..6}; do
+        alias t"${i}"="tree -L ${i}"
+done
 
-alias term="gnome-terminal"
-alias ls='ls --color=auto'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
+alias sys="systemctl "
+alias reboot="systemctl reboot"
+alias suspend="systemctl suspend"
 
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias l='ls -l'
-alias la='ls -A'
+alias j="jobs"
+alias h="history"
+alias pu="pushd"
+alias po="popd"
 
-alias 'pip3ins'='pip3 install --proxy fastweb.int.bell.ca:80'
-alias 'pipinst'='pip install --proxy fastweb.int.bell.ca:80'
+# editor
+alias e=${EDITOR}
+alias vim=${EDITOR}
+# alias ew="emacs -nw"
+# alias e="emacs -nw"
 
+# locations
+alias cdc="~/code"
+alias cdn="cd ~/notes"
+alias cdt="~/code/tp"
