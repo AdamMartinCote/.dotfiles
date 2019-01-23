@@ -1,0 +1,8 @@
+l
+ls
+ll
+ls -l
+pipenv shell
+django --version
+django-admin
+pipenv shell

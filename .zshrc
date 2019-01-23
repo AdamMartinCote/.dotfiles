@@ -50,9 +50,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-        export EDITOR='vim'
+        export EDITOR='vi'
 else
-        export EDITOR='nvim'
+        export EDITOR='emacs -nw'
 fi
 
 # Compilation flags
@@ -71,3 +71,6 @@ fi
 if which ruby >/dev/null && which gem >/dev/null; then
     PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
+
+# go path
+export GOPATH=$HOME/code/go

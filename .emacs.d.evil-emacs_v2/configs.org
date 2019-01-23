@@ -1,0 +1,196 @@
+
+#+TITLE: My GNU Emacs configuration
+#+STARTUP: indent
+#+OPTIONS: H:5 num:nil tags:nil toc:nil timestamps:t
+#+LAYOUT: post
+#+DESCRIPTION: Loading emacs configuration using org-babel
+#+TAGS: emacs
+#+CATEGORIES: editing
+
+* Security settings
+
+Great article why [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html][Your editor is malware]]. The following basically sets up the configuration to
+adhere to the articles recommondations.
+
+#+BEGIN_SRC shell :exports none
+python -m pip install --user certifi
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+
+  (require 'cl)
+  (setq tls-checktrust t)
+
+  (setq python (or (executable-find "py.exe")
+                   (executable-find "python")
+                   ))
+
+  (let ((trustfile
+         (replace-regexp-in-string
+          "\\\\" "/"
+          (replace-regexp-in-string
+           "\n" ""
+           (shell-command-to-string (concat python " -m certifi"))))))
+    (setq tls-program
+          (list
+           (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
+                   (if (eq window-system 'w32) ".exe" "") trustfile)))
+    (setq gnutls-verify-error t)
+    (setq gnutls-trustfiles (list trustfile)))
+
+#+END_SRC
+
+* General
+** Identity
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Adam Martin-Côté")
+  (setq user-mail-address "me@adammartincote.com")
+#+END_SRC
+
+** Editor Apearance
+#+BEGIN_SRC emacs-lisp
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (global-hl-line-mode 1)
+  (menu-bar-mode -1)
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  (put 'scroll-left 'disabled nil)
+  (column-number-mode 1)
+#+END_SRC
+
+** Urls
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'html-mode-hook 'my-html-mode-hook)
+  (defun my-html-mode-hook ()
+    (goto-address-mode))
+#+END_SRC
+* Installing use-package
+** Setup
+
+GNU Emacs has a lot of packages that make things very easy for the
+user. The package management infrastructure makes it a breeze to
+install new packages and keep up-to-date with their development.
+
+There are several package archives available for GNU Emacs:
+
+- GNU
+- Marmalade
+- Melpa
+
+Each archive will write its files in a seperate archive directory.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+#+END_SRC
+
+Because the default setting for package-archives is to use the HTTP access to the GNU archive, I set the variable to `nil` before adding the HTTPS variants.
+
+#+name: credmp-package-infrastructure
+#+begin_src emacs-lisp
+
+  (defvar gnu '("gnu" . "https://elpa.gnu.org/packages/"))
+  (defvar melpa '("melpa" . "https://melpa.org/packages/"))
+  (defvar melpa-stable '("melpa-stable" . "https://stable.melpa.org/packages/"))
+  (defvar org-elpa '("org" . "http://orgmode.org/elpa/"))
+
+  ;; Add marmalade to package repos
+  (setq package-archives nil)
+  (add-to-list 'package-archives melpa-stable t)
+  (add-to-list 'package-archives melpa t)
+  (add-to-list 'package-archives gnu t)
+  (add-to-list 'package-archives org-elpa t)
+#+end_src
+
+Initialize the archive and refresh the contents in case there is no cached archive.
+
+#+BEGIN_SRC emacs-lisp
+  (package-initialize)
+
+  (unless (and (file-exists-p (concat init-dir "elpa/archives/gnu"))
+               (file-exists-p (concat init-dir "elpa/archives/melpa"))
+               (file-exists-p (concat init-dir "elpa/archives/melpa-stable")))
+    (package-refresh-contents))
+#+END_SRC
+
+At each load the package list will be evaluated and any missing
+packages will be installed. The packages-install function deals with
+this check and takes care of any loading of the packages.
+
+#+name: credmp-package-installer
+#+begin_src emacs-lisp
+  (defun packages-install (&rest packages)
+    (message "running packages-install")
+    (mapc (lambda (package)
+            (let ((name (car package))
+                  (repo (cdr package)))
+              (when (not (package-installed-p name))
+                (let ((package-archives (list repo)))
+                  (package-initialize)
+                  (package-install name)))))
+          packages)
+    (package-initialize)
+    (delete-other-windows))
+#+end_src
+* Key Binding
+** French Keyboard Translation
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-é")   (kbd "C-/"))
+  (global-set-key (kbd "M-¨")   (kbd "M-{"))
+  (global-set-key (kbd "M-Ç")   (kbd "M-}"))
+  (global-set-key (kbd "M-'")   (kbd "M-<"))
+  (global-set-key (kbd "M-\\")  (kbd "M->"))
+  (global-set-key (kbd "C-M-à") (kbd "C-M-\\"))
+#+END_SRC
+* Programming
+** Indent
+#+BEGIN_SRC emacs-lisp
+  (setq-default js-indent-level 2)
+  (setq-default python-indent-offset 4)
+
+  (setq backward-delete-char-untabify-method 'hungry)
+  (setq-default electric-indent-inhibit t)
+#+END_SRC
+* Modeline
+
+add mode indicator for evil
+#+BEGIN_SRC emacs-lisp
+  ;; (setq evil-normal-state-tag   (propertize " COMMAND " 'face '(
+  ;; 	(:background "dark khaki" :foreground "black")))
+  ;;       evil-emacs-state-tag    (propertize "  EMACS  " 'face '(
+  ;; 	(:background "turquoise" :foreground "black")))
+  ;;       evil-insert-state-tag   (propertize " ------- " 'face '(
+  ;; 	(:background "dark sea green" :foreground "black")))
+  ;;       evil-replace-state-tag  (propertize " REPLACE " 'face '(
+  ;; 	(:background "dark orange" :foreground "black")))
+  ;;       evil-motion-state-tag   (propertize "  MOTION " 'face '(
+  ;;         (:background "khaki" :foreground "black")))
+  ;;       evil-visual-state-tag   (propertize "  VISUAL " 'face '(
+  ;;         (:background "light salmon" :foreground "black")))
+  ;; ;;     
+  ;; evil-operator-state-tag (propertize " OPERATE " 'face '(
+  ;; ;
+                                          ; 	(:background "sandy brown" :foreground "black"))))
+#+END_SRC
+(doom-modeline-init)
+(use-package 'dashboard)
+
+* Javascript
+
+Use rjsx-mode for all *.js files
+
+#+BEGIN_SRC emacs-lisp
+   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
+#+END_SRC
+
+* Evil
+#+BEGIN_SRC emacs-lisp
+(evil-mode)
+(evil-vimish-fold-mode 1)
+(global-set-key (kbd "C-x C-;") 'evilnc-comment-or-uncomment-lines)
+#+END_SRC
+* Projectile
+#+BEGIN_SRC emacs-lisp
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+#+END_SRC

@@ -1,0 +1,27 @@
+ll
+l
+ls
+ls
+./build.sh 
+./tictactoe 
+Please enter row (a,b,c)
+ls
+cd ..
+cd ..
+ls
+cd frontend/
+yarn build
+cd ../backend/
+l
+ls
+pipenv shell
+pipenv shell
+cd ../frontend/build/
+mkdir root
+mv *.ico *.js *.json root
+ls
+cd ../../backend/
+l
+ls
+pipenv shell
+pipenv shell

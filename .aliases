@@ -24,3 +24,6 @@ alias vim=${EDITOR}
 alias cdc="~/code"
 alias cdn="cd ~/notes"
 alias cdt="~/code/tp"
+
+# grub
+alias update-grub='grub-mkconfig -o /boot/grub/grub.cfg'
