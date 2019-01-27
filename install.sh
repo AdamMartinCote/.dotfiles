@@ -1,13 +1,13 @@
 #!/bin/bash
 
 
-install_directory="$HOME"
-source_directory="$HOME/code/dotfiles/"
+install_dir="$HOME"
+dropbox_dir="$HOME/Dropbox/dotfiles"
 
 function link_folder {
 		item=$1
-		backup_if_exist "$install_directory/$1"
-		ln -s "$source_directory/$item" "$install_directory/$item"
+		backup_if_exist "$install_d10ir/$1"
+		ln -s "$source_directory/$item" "$install_dir/$item"
 }
 
 function backup_if_exist {
@@ -21,4 +21,23 @@ function backup_if_exist {
 		fi
 }
 
-link_folder dummydir
+# config files to set up
+config_files=( '.oh-my-zsh' '.zshrc' '.aliases' '.emacs.d' '.tmux.conf')
+
+for i in "${config_files[@]}"
+do
+		echo "$i"
+done
+
+echo 'testing link folder'
+echo '...'
+link_folder "dummy_fold"
+
+
+
+package_list=( 'zsh' 'pm-sensors' 'htop' 'emacs' 'tree' )
+emacs_deps=( 'autoconf' 'textinfo' 'gtk2.0')
+
+# checkinstall : add compiled program to ubuntu package manager
+
+ubuntu_packages=( 'apt-file' )
