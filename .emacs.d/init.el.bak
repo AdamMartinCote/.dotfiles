@@ -12,11 +12,6 @@
   (package-install 'use-package))
 (require 'use-package)
 
-
-;; All Keybindings
-(setq projectile-key		(kbd "C-c p"))
-(setq visual-regexp-key (kbd "C-c r"))
-
 ;; text
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 ;; (global-linum-mode t)
@@ -45,11 +40,14 @@
 ;; reading mode
 (use-package centered-window :ensure t)
 
+;; ⚠tests
+(setq foo (kbd "C-c w"))
+(global-set-key foo 'next-line)
+
+
 (use-package visual-regexp
 	:ensure t
-	:config
-	(global-set-key visual-regexp-key 'vr/replace)
-	)
+	:bind ("C-c r" . vr/replace))
 
 ;; Dashboard
 (use-package dashboard
@@ -57,9 +55,7 @@
   :diminish dashboard-mode
   :config
   (setq dashboard-items '((recents   . 10)
-                          (bookmarks . 10)
-													(projects . 5)
-													))
+                          (bookmarks . 10)))
   (dashboard-setup-startup-hook))
 
 (add-to-list 'default-frame-alist '(height . 50))
@@ -70,6 +66,7 @@
   :ensure t
   :config
   (load-theme 'doom-one t))
+
 
 ;; Helm
 (use-package helm
@@ -110,11 +107,6 @@
 (define-key key-translation-map (kbd "C-c a !") (kbd "⚠"))
 (define-key key-translation-map (kbd "C-c a s") (kbd "✰"))
 
-
-;; Insert Lorem Ipsum
-(global-set-key (kbd "C-c l s") 'lorem-ipsum-insert-sentences)
-(global-set-key (kbd "C-c l p") 'lorem-ipsum-insert-paragraphs)
-
 (defalias 'yes-or-no-p 'y-or-n-p)
 (auto-fill-mode t)
 
@@ -147,23 +139,6 @@
 ;; web-mode for .html files
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 
-;; projectile (if error 'package-refresh-content)
-(use-package projectile
-	:ensure t
-	:config
-	(projectile-global-mode)
-	(define-key projectile-mode-map projectile-key
-	'projectile-command-map)
-	(setq projectile-project-search-path '("~/code/tp/" "~/code/web/"))
-	)
-
-(use-package helm-projectile
-	:ensure t
-	:config
-	(helm-projectile-on)
-	)
-
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -172,7 +147,7 @@
  '(js-indent-level 2)
  '(package-selected-packages
 	 (quote
-		(helm-ag helm-projectile projectile emmet-mode csv-mode centered-window visual-regexp go-mode auto-complete multi-web-mode lorem-ipsum web-mode use-package markdown-mode+ helm doom-themes dashboard)))
+		(emmet-mode csv-mode centered-window visual-regexp go-mode auto-complete multi-web-mode lorem-ipsum web-mode use-package markdown-mode+ helm doom-themes dashboard)))
  '(tab-width 2)
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
@@ -184,4 +159,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(fringe ((t (:background "#282c34")))))
-(put 'scroll-left 'disabled nil)
