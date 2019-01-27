@@ -1,6 +1,10 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+
+# Remove permission error
+ZSH_DISABLE_COMPFIX=true
+
 # Path to your oh-my-zsh installation.
 export ZSH="/home/adam/.oh-my-zsh"
 
@@ -74,3 +78,10 @@ fi
 
 # go path
 export GOPATH=$HOME/code/go
+
+# change prompt if root
+if [[ $EUID -eq 0 ]]; then
+	autoload colors
+	colors
+	PS1="%~ %{%(#~$fg[red]~$fg[blue])%}%#%{$fg[default]%} "
+fi
