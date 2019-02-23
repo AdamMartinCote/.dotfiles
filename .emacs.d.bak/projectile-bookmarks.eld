@@ -1,0 +1,1 @@
+("~/Dropbox/notes/" "~/code/web/tabtester/" "~/code/web/mysite_v1/" "~/code/tp/inf8808/" "~/code/tp/EncodingPerformance/" "~/tmp/EncodingPerformance/res/" "~/Dropbox/dotfiles/" "~/Downloads/git-quick-stats/" "~/code/INF8770/" "~/code/suckless/surf/")

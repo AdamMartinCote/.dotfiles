@@ -1,1 +1,1 @@
-("~/Dropbox/dotfiles/" "~/code/web/mysite_v1/" "~/code/tp/inf8808/")
+("~/Dropbox/dotfiles/" "~/code/latex/1102_devoir/" "~/Dropbox/notes/" "~/code/suckless/dwm/" "~/dotfiles/")

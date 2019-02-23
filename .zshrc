@@ -13,6 +13,9 @@ export ZSH="/home/adam/.oh-my-zsh"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
 ZSH_THEME="crunch"
+#ZSH_THEME="agnoster"
+#ZSH_THEME="dieter"
+#ZSH_THEME="kardan"
 
 CASE_SENSITIVE="true"
 
@@ -85,3 +88,8 @@ if [[ $EUID -eq 0 ]]; then
 	colors
 	PS1="%~ %{%(#~$fg[red]~$fg[blue])%}%#%{$fg[default]%} "
 fi
+
+#echo "** Zsh config updated"
+
+
+neofetch
