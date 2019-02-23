@@ -1,0 +1,323 @@
+* Performance
+
+This gives about 20% faster startup speed
+
+#+BEGIN_SRC emacs-lisp
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+
+(defvar startup/file-name-handler-alist file-name-handler-alist)
+(setq file-name-handler-alist nil)
+
+(defun startup/revert-file-name-handler-alist ()
+  (setq file-name-handler-alist startup/file-name-handler-alist))
+
+(defun startup/reset-gc ()
+  (setq gc-cons-threshold 16777216
+	gc-cons-percentage 0.1))
+
+(add-hook 'emacs-startup-hook 'startup/revert-file-name-handler-alist)
+(add-hook 'emacs-startup-hook 'startup/reset-gc)
+#+END_SRC
+
+* General
+
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+(auto-fill-mode t)
+#+END_SRC
+
+* Editing
+
+** Auto Complete
+#+BEGIN_SRC emacs-lisp
+(require 'auto-complete)
+(global-auto-complete-mode t)
+#+END_SRC
+
+** Tabs
+
+Default tab size
+#+BEGIN_SRC emacs-lisp
+(setq tab-width 2)
+#+END_SRC
+
+Delete all tabs on backspace
+#+BEGIN_SRC emacs-lisp
+(setq backward-delete-char-untabify-method 'hungry)
+#+END_SRC
+
+Use normal tab behavior (disabled)
+#+BEGIN_SRC emacs-lisp
+;; (global-set-key (kbd "TAB") 'self-insert-command)
+#+END_SRC
+
+** C-z
+
+Disable C-z to minimize in GUI only
+#+BEGIN_SRC emacs-lisp
+(when (display-graphic-p)
+	(global-unset-key "\C-z")
+	(global-set-key "\C-z" 'advertised-undo)
+	)
+#+END_SRC
+
+** Horizontal bar
+
+#+BEGIN_SRC emacs-lisp
+(global-hl-line-mode t)
+#+END_SRC
+
+** Whitespace
+Display whitespaces at all time
+#+BEGIN_SRC emacs-lisp
+;; (global-whitespace-mode)
+#+END_SRC
+
+Delete trailing whitespaces on save
+#+BEGIN_SRC emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+
+** Line numbers
+
+#+BEGIN_SRC emacs-lisp
+(global-linum-mode t)
+#+END_SRC
+
+** Text selection
+
+Replace selected text like modern editor
+#+BEGIN_SRC emacs-lisp
+(delete-selection-mode 1)
+#+END_SRC
+
+** Backup files
+No backup file
+#+BEGIN_SRC emacs-lisp
+(setq make-backup-files nil) ; stop creating backup~ files
+(setq auto-save-default nil) ; stop creating #autosave# files
+#+END_SRC
+
+** Matching parens
+
+#+BEGIN_SRC emacs-lisp
+(setq show-paren-delay 0)
+(show-paren-mode 1)
+#+END_SRC
+
+
+** Last buffer
+
+#+BEGIN_SRC emacs-lisp
+(defun er-switch-to-previous-buffer ()
+  "Switch to previously open buffer. Repeated invocations toggle
+   between the two most recently open buffers."
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+(global-set-key (kbd "C-c b") #'er-switch-to-previous-buffer)
+#+END_SRC
+
+* Text Mode
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+#+END_SRC
+
+* Org Mode
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+#+END_SRC
+
+* Appearance
+** Interface
+
+Remove unnecessary widgets
+#+BEGIN_SRC emacs-lisp
+(scroll-bar-mode -1)
+(tool-bar-mode   -1)
+(tooltip-mode    -1)
+(menu-bar-mode   -1)
+(setq inhibit-startup-screen t)
+#+END_SRC
+
+** Theme
+#+BEGIN_SRC emacs-lisp
+(use-package doom-themes
+  :ensure t
+  :config
+  (load-theme 'doom-one t))
+#+END_SRC
+
+** Window dimensions
+Initial dimensions
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'default-frame-alist '(height . 50))
+(add-to-list 'default-frame-alist '(width  . 90))
+#+END_SRC
+
+* Plugins
+
+** Dashboard
+
+#+BEGIN_SRC emacs-lisp
+  (require 'dashboard)
+  (use-package dashboard
+    :ensure t
+    :preface
+    (defun my/dashboard-banner ()
+    """Set a dashboard banner including information on package initialization
+     time and garbage collections."""
+     (setq dashboard-banner-logo-title
+          (format "Emacs ready in %.2f seconds with %d garbage collections."
+                  (float-time (time-subtract after-init-time before-init-time)) gcs-done)))
+    :init
+    ;; (add-hook 'after-init-hook 'dashboard-refresh-buffer)
+    ;; (add-hook 'dashboard-mode-hook 'my/dashboard-banner)
+    :config
+    ;; (setq dashboard-startup-banner 'logo)
+    (when (display-graphic-p)
+     (dashboard-setup-startup-hook))
+  )
+#+END_SRC
+
+
+** Helm
+
+#+BEGIN_SRC emacs-lisp
+(use-package helm
+  :ensure t
+  :init
+  (setq helm-M-x-fuzzy-match t
+  helm-mode-fuzzy-match t
+  helm-buffers-fuzzy-matching t
+  helm-recentf-fuzzy-match t
+  helm-locate-fuzzy-match t
+  helm-semantic-fuzzy-match t
+  helm-imenu-fuzzy-match t
+  helm-completion-in-region-fuzzy-match t
+  helm-candidate-number-list 150
+  helm-split-window-in-side-p t
+  helm-move-to-line-cycle-in-source t
+  helm-echo-input-in-header-line t
+  helm-autoresize-max-height 0
+  helm-autoresize-min-height 20)
+  :config
+  (helm-mode 1)
+  :bind ("C-x C-f" . helm-find-files)
+  :bind ("C-x C-b" . helm-buffers-list)
+
+  ;; Tab completion in helm
+  :bind (:map helm-map
+							("TAB"   . #'helm-execute-persitent-action))
+  :bind (:map helm-map
+							("<tab>" . #'helm-execute-persistent-action))
+  :bind (:map helm-map
+							("C-z"   . #'helm-select-action))
+  )
+#+END_SRC
+
+** Projectile
+
+if error run 'package-refresh-content
+
+#+BEGIN_SRC emacs-lisp
+(setq projectile-key		(kbd "C-c p"))
+(use-package projectile
+	:ensure t
+	:config
+	(projectile-global-mode)
+	(define-key projectile-mode-map projectile-key
+	'projectile-command-map)
+	(setq projectile-project-search-path '("~/code/tp/"))
+	)
+
+(use-package helm-projectile
+	:ensure t
+	:config
+	(helm-projectile-on)
+	)
+#+END_SRC
+
+** Emmet
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c e") 'emmet-expand-line)
+#+END_SRC
+
+** Visual Regex Replace
+
+#+BEGIN_SRC emacs-lisp
+(setq visual-regexp-key (kbd "C-c r"))
+(use-package visual-regexp
+	:ensure t
+	:config
+	(global-set-key visual-regexp-key 'vr/replace)
+	)
+#+END_SRC
+
+** Centered windows
+
+Cleaner reading mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package centered-window :ensure t)
+#+END_SRC
+
+** Vdiff
+#+BEGIN_SRC emacs-lisp
+(require 'vdiff)
+(define-key vdiff-mode-map (kbd "C-c d") vdiff-mode-prefix-map)
+#+END_SRC
+
+** Expand Region
+
+#+BEGIN_SRC emacs-lisp
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+#+END_SRC
+
+** Undo Tree
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :ensure t
+  :bind ("C-x u" . undo-tree-visualize))
+#+END_SRC
+
+** Lorem Ipsum
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c l s") 'lorem-ipsum-insert-sentences)
+(global-set-key (kbd "C-c l p") 'lorem-ipsum-insert-paragraphs)
+#+END_SRC
+
+* Programming
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+#+END_SRC
+
+* Experimental
+
+<tab> insert tabs like normal editor
+#+BEGIN_SRC emacs-lisp
+;; (global-set-key (kbd "TAB") 'self-insert-command)
+#+END_SRC
+
+Display some special characters
+#+BEGIN_SRC emacs-lisp
+  ;; (when window-system
+  ;;       (use-package pretty-mode
+  ;;       :ensure t
+  ;;       :config
+  ;;       (global-pretty-mode t)))
+#+END_SRC
+
+* Special Characters
+
+#+BEGIN_SRC emacs-lisp
+(define-key key-translation-map (kbd "C-c a !") (kbd "⚠"))
+(define-key key-translation-map (kbd "C-c a s") (kbd "✰"))
+#+END_SRC
